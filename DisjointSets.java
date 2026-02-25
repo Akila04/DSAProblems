@@ -29,6 +29,20 @@ public class DisjointSets {
         return false;
     }
 
+    private static boolean findLoopInGraph1(Integer numberOfNodes, Map<Integer, Integer> edges) {
+        System.out.println("LOOP");
+        List<Integer> vertices = new ArrayList<>(Collections.nCopies(numberOfNodes+1, -1));
+        for(Map.Entry<Integer, Integer> edge : edges.entrySet()) {
+            Integer index1 = edge.getKey();
+            Integer index2 = edge.getValue();
+            Boolean loopExist = findLoopAndadjustVertices(index1, index2, vertices);
+            if(loopExist) {
+                System.out.println("Loop Exist :::: Edge : " + edge.getKey() + "  , " + edge.getValue());
+            }
+        }
+        return false;
+    }
+
     private static Boolean findLoopAndadjustVertices(Integer index1, Integer index2, List<Integer> vertices) {
         Integer index1Parent;
         Integer index2Parent;
@@ -53,6 +67,9 @@ public class DisjointSets {
             vertices.set(index2, vertices.get(index2)+(-1) );
             vertices.set(index1, index2);
         } else if(index2Parent == -1 && index1Parent >-1){
+            vertices.set(index1, vertices.get(index1)+(-1));
+            vertices.set(index2, index1);
+        } else if(index1Parent == -1 && index2Parent == -1) {
             vertices.set(index1, vertices.get(index1)+(-1));
             vertices.set(index2, index1);
         } else {
